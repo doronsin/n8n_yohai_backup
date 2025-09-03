@@ -1,0 +1,585 @@
+{
+  "active": true,
+  "connections": {
+    "Get many board groups": {
+      "main": [
+        [
+          {
+            "node": "Get many items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many items": {
+      "main": [
+        [
+          {
+            "node": "filter has birthday",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter has birthday": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Male message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Female message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Other message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Other message": {
+      "main": [
+        [
+          {
+            "node": "Get Message",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Male message": {
+      "main": [
+        [
+          {
+            "node": "Get Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Female message": {
+      "main": [
+        [
+          {
+            "node": "Get Message",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get Message": {
+      "main": [
+        [
+          {
+            "node": "Send Message not on Shabbat",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many board groups",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Message not on Shabbat": {
+      "main": [
+        [
+          {
+            "node": "Update developers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-08T18:25:46.834Z",
+  "id": "8p1LslK67WMU2Uij",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Birthday",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "boardGroup",
+        "operation": "getAll",
+        "boardId": "1294618386"
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        220,
+        -40
+      ],
+      "id": "0f31734f-ea56-40db-a775-b46d36066ff9",
+      "name": "Get many board groups",
+      "credentials": {
+        "mondayComApi": {
+          "id": "WxbXGPUtLI9FUeMU",
+          "name": "Belev Echad Monday Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "getAll",
+        "boardId": "1294618386",
+        "groupId": "={{ $json.id }}",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        440,
+        -40
+      ],
+      "id": "86c18a41-9b13-4ecb-aa91-ebb935f88e48",
+      "name": "Get many items",
+      "credentials": {
+        "mondayComApi": {
+          "id": "WxbXGPUtLI9FUeMU",
+          "name": "Belev Echad Monday Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9c6b6ef7-62dd-4d8b-98f8-6fa3b4c96e00",
+              "leftValue": "={{ new Date($json.column_values.find(col => col.id === 'date9')?.text).getMonth() + 1 }}",
+              "rightValue": "={{ new Date().getMonth() + 1 }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "68150098-a0a4-44dc-ae51-a5160cae21d9",
+              "leftValue": "={{ new Date($json.column_values.find(col => col.id === 'date9')?.text).getDate()}}",
+              "rightValue": "={{ new Date().getDate() }}",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        -40
+      ],
+      "id": "3d781c0e-bb14-4b75-a0b6-c747f6ae3250",
+      "name": "filter has birthday"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.column_values.find(col => col.id === 'status__1')?.text}}",
+                    "rightValue": "זכר",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "17959803-15ef-496d-8dd6-89ba20705d6d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "זכר"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4dc84225-ee32-4ae0-8dc3-e04339c023a5",
+                    "leftValue": "={{$json.column_values.find(col => col.id === 'status__1')?.text}}",
+                    "rightValue": "נקבה",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "נקבה"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "אחר"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        880,
+        -40
+      ],
+      "id": "e57b3eec-ffb3-422c-b6dc-bc35499afb3a",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e8070ca2-bf09-4b59-a6a4-3e44b1a731af",
+              "name": "birthdayMessage",
+              "value": "=היי {{$json.name.split(' ')[0]}},\n\nאנו עמותת בלב אחד מאחלים ברכות חמות והמון מזל טוב מכל הלב!🎊🎊\n\nנרצה לאחל לך ימים של בריאות, שמחה, אהבה והצלחות בכל דרך שתבחר! 🎂 שתזכה תמיד לאור, לחיוך ולרגעים של שקט ונחת – כי אתה ראוי לכל הטוב שבעולם.👑\n\nבברכה חמה,\nצוות עמותת בלב אחד❤",
+              "type": "string"
+            },
+            {
+              "id": "c34c9b02-4325-4d5c-bdd5-03388b2d495e",
+              "name": "phone",
+              "value": "={{ $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text.startsWith('0') ? '972' + $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text.substring(1) : $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        -240
+      ],
+      "id": "ec5a0b75-df86-427f-8b00-ae7c33591b69",
+      "name": "Male message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e8070ca2-bf09-4b59-a6a4-3e44b1a731af",
+              "name": "birthdayMessage",
+              "value": "=היי {{$json.name.split(' ')[0]}},\n\nאנו עמותת בלב אחד מאחלים ברכות חמות והמון מזל טוב מכל הלב!🎊🎊\n\nנרצה לאחל לך ימים של בריאות, שמחה, אהבה והצלחות בכל דרך שתבחרי! 🎂 שתזכי תמיד לאור, לחיוך ולרגעים של שקט ונחת – כי את ראויה לכל הטוב שבעולם.👑\n\nבברכה חמה,\nצוות עמותת בלב אחד❤",
+              "type": "string"
+            },
+            {
+              "id": "b4142267-15bf-43f9-8b78-98c61c6a95e2",
+              "name": "phone",
+              "value": "={{ $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text.startsWith('0') ? '972' + $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text.substring(1) : $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        -40
+      ],
+      "id": "35f1ce9d-55d6-4fe1-ac09-587a3e65c745",
+      "name": "Female message"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e8070ca2-bf09-4b59-a6a4-3e44b1a731af",
+              "name": "birthdayMessage",
+              "value": "=היי {{$json.name.split(' ')[0]}},\n\nאנו עמותת בלב אחד מאחלים ברכות חמות והמון מזל טוב מכל הלב!🎊🎊\n\nנרצה לאחל לך ימים של בריאות, שמחה, אהבה והצלחות בכל דרך שתבחר.י! 🎂 שתזכה/י תמיד לאור, לחיוך ולרגעים של שקט ונחת – כי את.ה ראוי.ה לכל הטוב שבעולם.👑\n\nבברכה חמה,\nצוות עמותת בלב אחד❤",
+              "type": "string"
+            },
+            {
+              "id": "db56b68c-c21b-4c43-b319-ced0b04d0d88",
+              "name": "phone",
+              "value": "={{ $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text.startsWith('0') ? '972' + $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text.substring(1) : $json.column_values.find(col => col.id === 'phone_mknpqxf3')?.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1100,
+        160
+      ],
+      "id": "a9f90602-21d9-418f-aad8-57e723439a29",
+      "name": "Other message"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1320,
+        -40
+      ],
+      "id": "71a9b392-d5e3-4dd9-bc6a-ef1032f5b268",
+      "name": "Get Message"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "ip44I196K8alsAAM",
+          "mode": "list",
+          "cachedResultName": "Send Whatsapp not on Shabbat"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "message": "=מN8N\n\n{{ $json.birthdayMessage }} \n\nמספר נייד:\n{{ $json.phone.startsWith('0') ? '972' + $json.phone.substring(1) : $json.phone }}\n",
+            "to": "972505708855"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "to",
+              "displayName": "to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1540,
+        -40
+      ],
+      "id": "bad6849e-2f9b-441f-94dc-2afc1def7990",
+      "name": "Send Message not on Shabbat"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        -40
+      ],
+      "id": "5f3ba681-2b84-429a-a9b3-d84f55863a45",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "## להפעלה \nלמחוק את מספר הפלאפון מסוף ההודעה, ולשלוח למספר הנכון.\n\nלהוסיף עדכון של עמודה ב monday\n\nלמחוק מההודעה את הכותרת של n8n\n\nלמחוק מעדכון מפתחים את הכותרת של n8n",
+        "height": 220,
+        "width": 440
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1260,
+        -340
+      ],
+      "id": "ada5574c-650d-456d-a4f7-f99d335916f7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "A9kmhJAGVjBA739W",
+          "mode": "list",
+          "cachedResultName": "Update developers"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "yohai": true,
+            "doron": true,
+            "shani": false,
+            "shaked": false,
+            "message": "=מN8N\n\nהודעת יומולדת נשלחה בהצלחה ל{{ $('filter has birthday').item.json.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "yohai",
+              "displayName": "yohai",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean"
+            },
+            {
+              "id": "doron",
+              "displayName": "doron",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean"
+            },
+            {
+              "id": "shani",
+              "displayName": "shani",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean"
+            },
+            {
+              "id": "shaked",
+              "displayName": "shaked",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean"
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1760,
+        -40
+      ],
+      "id": "b64d0052-1e95-48f0-8d88-cedcf590ecf9",
+      "name": "Update developers"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n_yohai_backup",
+  "repo_owner": "doronsin@gmail.com",
+  "repo_path": "https://github.com/doronsin/n8n_yohai_backup/",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-07-08T18:25:46.838Z",
+      "updatedAt": "2025-07-08T18:25:46.838Z",
+      "role": "workflow:owner",
+      "workflowId": "8p1LslK67WMU2Uij",
+      "projectId": "H3Elz2yRMoyJBjo9"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-07-09T18:24:08.000Z",
+  "versionId": "f707508e-5881-4cfd-8eaa-035b8640221d"
+}
