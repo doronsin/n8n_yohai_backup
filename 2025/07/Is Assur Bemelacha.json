@@ -1,0 +1,119 @@
+{
+  "active": false,
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-08T19:44:29.936Z",
+  "id": "pAE3WIrI7xDxpvcg",
+  "isArchived": false,
+  "meta": null,
+  "name": "Is Assur Bemelacha",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "time to check"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e9a7e47c-5e32-4c3a-8977-6a0246b3d8a6",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "url": "=https://www.hebcal.com/zmanim?cfg=json&im=1&geonameid=281184&dt={{$json[\"time to check\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "d37019dd-6215-4686-9a24-bf27a9a9ad04",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9721e13f-3be0-4b54-b50d-784c917e49e2",
+              "name": "isAssurBemlacha",
+              "value": "={{ $json.status.isAssurBemlacha }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        440,
+        0
+      ],
+      "id": "0b2f606b-8e45-4855-88f1-b86ab1112e37",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "time to check": "2025-07-12T18:28:10Z"
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n_yohai_backup",
+  "repo_owner": "doronsin@gmail.com",
+  "repo_path": "https://github.com/doronsin/n8n_yohai_backup/",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-07-08T19:44:29.946Z",
+      "updatedAt": "2025-07-08T19:44:29.946Z",
+      "role": "workflow:owner",
+      "workflowId": "pAE3WIrI7xDxpvcg",
+      "projectId": "H3Elz2yRMoyJBjo9"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-15T14:17:30.000Z",
+  "versionId": "4bb7ea1e-c692-41e9-b4b0-9d37f8f3387f"
+}
