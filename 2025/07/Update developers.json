@@ -1,0 +1,180 @@
+{
+  "active": false,
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create Numbers to Updates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Numbers to Updates": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "message developer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-08T22:56:20.695Z",
+  "id": "A9kmhJAGVjBA739W",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Update developers",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "yohai",
+              "type": "boolean"
+            },
+            {
+              "name": "doron",
+              "type": "boolean"
+            },
+            {
+              "name": "shani",
+              "type": "boolean"
+            },
+            {
+              "name": "shaked",
+              "type": "boolean"
+            },
+            {
+              "name": "message"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        80
+      ],
+      "id": "ef45e498-3e26-4383-9da2-aaba25d4d200",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "092ce826-a60f-443b-bfa7-411497e4a8cc",
+              "name": "numbersToUpdate",
+              "value": "={{[\n  $json.doron ? \"972505708855\" : null,\n  $json.yohai ? \"972508854434\" : null,\n  $json.shani ? \"972527221692\" : null,\n  $json.shaked ? \"972527513334\" : null,\n].filter(Boolean)}}",
+              "type": "array"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "selected",
+        "includeFields": "message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        80
+      ],
+      "id": "e19bdfaf-fd82-4de2-bdb7-6a97f0b91062",
+      "name": "Create Numbers to Updates"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "numbersToUpdate",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "message",
+        "options": {
+          "destinationFieldName": "number"
+        }
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        440,
+        80
+      ],
+      "id": "e50a77b0-7d38-4f3e-9b83-bb82ad37a2c1",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $json.number }}@c.us",
+        "message": "={{ $json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-whatsapp-green-api.greenApi",
+      "typeVersion": 1,
+      "position": [
+        700,
+        80
+      ],
+      "id": "d010f976-d0c3-4ddc-ac28-67c4c4e2c81c",
+      "name": "message developer",
+      "credentials": {
+        "greenApi": {
+          "id": "7K3NwiY4gxJ7xmf4",
+          "name": "Green account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "yohai": true,
+          "doron": null,
+          "shani": null,
+          "shaked": null,
+          "message": null
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n_yohai_backup",
+  "repo_owner": "doronsin@gmail.com",
+  "repo_path": "https://github.com/doronsin/n8n_yohai_backup/",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-07-08T22:56:20.697Z",
+      "updatedAt": "2025-07-08T22:56:20.697Z",
+      "role": "workflow:owner",
+      "workflowId": "A9kmhJAGVjBA739W",
+      "projectId": "H3Elz2yRMoyJBjo9"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-15T14:17:34.000Z",
+  "versionId": "c0e36ac5-f23a-4654-9cf9-0104883e7738"
+}
