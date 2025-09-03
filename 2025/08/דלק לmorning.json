@@ -1,0 +1,149 @@
+{
+  "active": false,
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-01T09:39:22.627Z",
+  "id": "J2zlm2IODLhPpqQF",
+  "isArchived": true,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "דלק לmorning",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "q": "דוחות תדלוקי",
+          "sender": " noreply@delek.co.il"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c25c7a37-8a9f-41fd-8576-93a329dc0706",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "b76W3uWlTd8ubMeM",
+          "name": "doron's gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.greeninvoice.co.il/api/v1/account/token",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "0447b420-7203-4915-b43a-6c411b732891"
+            },
+            {
+              "name": "secret",
+              "value": "miNegl42ECWupb0IPrM4eA"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "dec06a20-33f7-4cf7-b087-27c7396b016d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "https://api.greeninvoice.co.il/api/v1/expenses/file",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.token }}"
+            },
+            {
+              "name": "data",
+              "value": "{\"source\": 5, \"id\": 7}"
+            },
+            {
+              "name": "context",
+              "value": "expense"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "0cf8c86b-8abe-46ac-8a5e-f671709919d9",
+      "name": "HTTP Request1"
+    }
+  ],
+  "pinData": {},
+  "repo_name": "n8n_yohai_backup",
+  "repo_owner": "doronsin@gmail.com",
+  "repo_path": "https://github.com/doronsin/n8n_yohai_backup/",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-08-01T09:39:22.632Z",
+      "updatedAt": "2025-08-01T09:39:22.632Z",
+      "role": "workflow:owner",
+      "workflowId": "J2zlm2IODLhPpqQF",
+      "projectId": "H3Elz2yRMoyJBjo9"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-01T10:06:18.000Z",
+  "versionId": "0046101d-0be4-4b19-9be2-2304e6e98f80"
+}
