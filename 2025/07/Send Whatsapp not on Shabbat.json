@@ -1,0 +1,272 @@
+{
+  "active": false,
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Is Assur Bemelacha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Assur Bemelacha": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "prepareOutput",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "send the message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "prepareOutput",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send the message": {
+      "main": [
+        []
+      ]
+    },
+    "prepareOutput": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2025-07-08T20:31:44.057Z",
+  "id": "ip44I196K8alsAAM",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Send Whatsapp not on Shabbat",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "message"
+            },
+            {
+              "name": "to"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -140
+      ],
+      "id": "5c59334c-727f-4c5b-8f86-150b0c840090",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "pAE3WIrI7xDxpvcg",
+          "mode": "list",
+          "cachedResultName": "Is Assur Bemelacha"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "time to check": "={{new Date().toISOString(); }}"
+          },
+          "matchingColumns": [
+            "time to check"
+          ],
+          "schema": [
+            {
+              "id": "time to check",
+              "displayName": "time to check",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        220,
+        -140
+      ],
+      "id": "b2e5e1ba-c415-4140-b458-2d231040d44e",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "amount": 24,
+        "unit": "hours"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        660,
+        -190
+      ],
+      "id": "ceb42798-4dc5-4730-80ad-e586014fdbe3",
+      "name": "Wait",
+      "webhookId": "8652a258-18e6-467c-b835-2af78e789ab5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ab3db8be-ded7-45dc-b4d4-92c1ac5979b1",
+              "leftValue": "={{ $json.isAssurBemlacha }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        -240
+      ],
+      "id": "14a5c369-7c66-417c-b041-3083146f9573",
+      "name": "Is Assur Bemelacha"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('When Executed by Another Workflow').item.json.to }}@c.us",
+        "message": "={{ $('When Executed by Another Workflow').item.json.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-whatsapp-green-api.greenApi",
+      "typeVersion": 1,
+      "position": [
+        660,
+        10
+      ],
+      "id": "1c26e238-9bf7-42ce-bb58-f2112353d320",
+      "name": "send the message",
+      "credentials": {
+        "greenApi": {
+          "id": "7K3NwiY4gxJ7xmf4",
+          "name": "Green account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "334e1428-2e7d-45f7-9f1d-b19a8d7b7de3",
+              "name": "didSend",
+              "value": "={{ !$json.isAssurBemlacha }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        -190
+      ],
+      "id": "cd0b2d2d-d06a-488b-9c8d-8f7d95e96785",
+      "name": "prepareOutput"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "message": "test",
+          "to": "972505708855"
+        }
+      }
+    ]
+  },
+  "repo_name": "n8n_yohai_backup",
+  "repo_owner": "doronsin@gmail.com",
+  "repo_path": "https://github.com/doronsin/n8n_yohai_backup/",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-07-08T20:31:44.061Z",
+      "updatedAt": "2025-07-08T20:31:44.061Z",
+      "role": "workflow:owner",
+      "workflowId": "ip44I196K8alsAAM",
+      "projectId": "H3Elz2yRMoyJBjo9"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-07-15T14:17:32.000Z",
+  "versionId": "5537c091-13e9-4ea2-ae0e-6f1200d65c1d"
+}
